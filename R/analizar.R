@@ -321,6 +321,12 @@ analizar_pdfs <- function(directorio,
                              (total_cruces * 2L)   +
                              (total_prox   * 5L)
 
+      # Liberar el texto del PDF apenas se termina de procesar: en cuerpos
+      # grandes (cientos de páginas) esto evita que la memoria se acumule
+      # a lo largo de muchos archivos y tire abajo la instancia en la nube.
+      rm(paginas, tiene_principal)
+      gc(verbose = FALSE)
+
       fila
 
     }, error = function(e) {

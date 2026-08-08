@@ -571,3 +571,56 @@ pre {
   opacity: .15;
   margin-bottom: 1rem;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   Mejoras visuales v2 (aditivas — no reemplazan reglas anteriores)
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Navbar con degradado sutil y un poco más de profundidad */
+.navbar {
+  background: linear-gradient(100deg, #163d5f 0%, var(--azul) 55%, #1f5c8f 100%) !important;
+}
+
+/* Tarjetas: leve elevación al pasar el cursor */
+.card {
+  transition: box-shadow .18s ease, transform .18s ease;
+}
+.card:hover {
+  box-shadow: var(--sombra-lg) !important;
+  transform: translateY(-1px);
+}
+
+/* Botón primario: degradado sutil para más presencia */
+.btn-primary {
+  background: linear-gradient(180deg, var(--azul-medio) 0%, var(--azul) 100%) !important;
+}
+
+/* Encabezados de tarjeta con un acento a la izquierda */
+.card-header {
+  border-left: 3px solid var(--azul) !important;
+}
+
+/* Franja informativa reutilizable (avisos de la app) */
+.dp-hero {
+  background: var(--azul-fondo);
+  border: 1px solid var(--gris-borde);
+  border-left: 4px solid var(--azul);
+  border-radius: var(--radio);
+  padding: .8rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: .92rem;
+  color: #33475b;
+}
+.dp-hero b { color: var(--azul); }
+
+/* Accesibilidad: foco visible con teclado */
+a:focus-visible, .btn:focus-visible, .nav-link:focus-visible {
+  outline: 2px solid var(--azul-medio) !important;
+  outline-offset: 2px !important;
+}
+
+/* Respeta "reducir movimiento" del sistema operativo */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .card:hover, .btn-primary:hover, .btn-success:hover { transform: none !important; }
+}

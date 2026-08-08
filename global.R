@@ -6,6 +6,14 @@
 # En local esa variable no existe, así que ES_LOCAL = TRUE.
 ES_LOCAL <- !nzchar(Sys.getenv("SHINYAPPS_APPLICATION_ID"))
 
+# ── Límites del analizador en la nube ─────────────────────────────────────────
+# El análisis carga y parsea los PDFs en memoria. En shinyapps.io (RAM limitada)
+# un volumen grande —p. ej. cientos de MB— satura la instancia y la tira abajo.
+# Por eso en la nube acotamos cuántos PDFs y cuánto peso total se analizan de una;
+# para volúmenes mayores, la app se corre en local (sin límites). En local no aplica.
+MAX_PDFS_WEB <- 40L    # cantidad máxima de PDFs a analizar online
+MAX_MB_WEB   <- 150L   # peso total máximo (MB) a analizar online
+
 # ── Instalación automática de paquetes (solo en local) ────────────────────────
 # En shinyapps.io los paquetes van bundleados durante el deploy,
 # por lo que install.packages() no es necesario ni deseable allí.
@@ -41,7 +49,9 @@ library(purrr)
 library(tidyr)
 library(fs)
 library(zip)
-library(shinyFiles)
+# shinyFiles solo se usa para el selector de carpeta en modo local;
+# en la nube no hace falta (allí se suben archivos, no se elige carpeta).
+if (ES_LOCAL) library(shinyFiles)
 
 source("R/scraper.R")
 source("R/downloader.R")

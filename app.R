@@ -1,6 +1,6 @@
 # app.R
 # Diarios del Parlamento Uruguay — Buscador y Analizador
-# github.com/[tu-usuario]/diarios-parlamento-uy
+# github.com/EmilianoGonLas/diarios-parlamento-uy
 
 source("global.R")
 
@@ -90,7 +90,7 @@ ui <- tagList(
   bslib::nav_spacer(),
   bslib::nav_item(
     tags$a(
-      href   = "https://github.com/[tu-usuario]/diarios-parlamento-uy",
+      href   = "https://github.com/EmilianoGonLas/diarios-parlamento-uy",
       target = "_blank",
       style  = "font-size:.88rem;",
       icon("github", class = "me-1"), "GitHub"
@@ -365,25 +365,50 @@ server <- function(input, output, session) {
   if (!ES_LOCAL) {
     observeEvent(input$pdf_upload, {
       req(input$pdf_upload)
+
+      subida <- input$pdf_upload
+      n_subidos <- nrow(subida)
+
+      # ── Tope de volumen (evita saturar la instancia en la nube) ──────────────
+      # Se aceptan archivos en orden hasta llegar al límite de cantidad o de peso
+      # total; el resto se descarta con aviso, sugiriendo la versión local.
+      tam_mb <- subida$size / 1024^2
+      acum_mb <- cumsum(tam_mb)
+      dentro  <- seq_len(n_subidos) <= MAX_PDFS_WEB & acum_mb <= MAX_MB_WEB
+      if (!any(dentro)) dentro[1] <- TRUE  # al menos el primero, aunque sea grande
+      subida  <- subida[dentro, , drop = FALSE]
+      n <- nrow(subida)
+      n_descartados <- n_subidos - n
+
       tmp <- file.path(tempdir(), paste0("upload_", as.integer(Sys.time())))
       fs::dir_create(tmp)
-      purrr::walk(seq_len(nrow(input$pdf_upload)), function(i) {
-        file.copy(
-          input$pdf_upload$datapath[i],
-          file.path(tmp, input$pdf_upload$name[i])
-        )
+      purrr::walk(seq_len(n), function(i) {
+        file.copy(subida$datapath[i], file.path(tmp, subida$name[i]))
       })
       rv$dir_pdfs <- tmp
-      n <- nrow(input$pdf_upload)
-      showNotification(
-        ui       = tagList(icon("check-circle", class = "me-1"),
-                           sprintf("%d PDF%s listo%s para analizar.",
-                                   n,
-                                   if (n == 1) "" else "s",
-                                   if (n == 1) "" else "s")),
-        type     = "message",
-        duration = 4
-      )
+
+      if (n_descartados > 0) {
+        showNotification(
+          ui = tagList(
+            tags$b(sprintf("⚠️ Se cargaron %d de %d PDFs.", n, n_subidos)),
+            tags$br(),
+            tags$span(class = "small", sprintf(
+              "En la nube el análisis se limita a %d PDFs o %d MB para no saturar el servidor. Para analizar el conjunto completo, corré la app en tu computadora (ver pestaña de instrucciones).",
+              MAX_PDFS_WEB, MAX_MB_WEB))
+          ),
+          type = "warning", duration = 12
+        )
+      } else {
+        showNotification(
+          ui       = tagList(icon("check-circle", class = "me-1"),
+                             sprintf("%d PDF%s listo%s para analizar.",
+                                     n,
+                                     if (n == 1) "" else "s",
+                                     if (n == 1) "" else "s")),
+          type     = "message",
+          duration = 4
+        )
+      }
     })
   }
 
@@ -765,6 +790,10 @@ ui_analizador <- function() {
             )
           } else {
             tagList(
+              div(class = "dp-hero",
+                  HTML(sprintf(
+                    "<b>An\u00e1lisis en la nube (acotado).</b> Para no saturar el servidor, ac\u00e1 se analizan hasta <b>%d PDFs</b> o <b>%d MB</b> por vez. \u00bfTenN\u00e9s muchos m\u00e1s (cientos de MB)? Corr\u00e9 la app en tu computadora \u2014 sin l\u00edmites (ver la pesta\u00f1a de instrucciones).",
+                    MAX_PDFS_WEB, MAX_MB_WEB))),
               fileInput(
                 "pdf_upload",
                 label       = "PDFs a analizar",
@@ -885,8 +914,8 @@ ui_instrucciones <- function() {
                    "Descarg\u00e1 el proyecto"),
           p(
             "And\u00e1 a ",
-            tags$a("github.com/[tu-usuario]/diarios-parlamento-uy",
-                    href   = "https://github.com/[tu-usuario]/diarios-parlamento-uy",
+            tags$a("github.com/EmilianoGonLas/diarios-parlamento-uy",
+                    href   = "https://github.com/EmilianoGonLas/diarios-parlamento-uy",
                     target = "_blank"),
             " y hac\u00e9 clic en ", tags$code("Code \u2192 Download ZIP"),
             ". Descomprim\u00ed la carpeta donde quieras."
