@@ -5,6 +5,38 @@
 
 BASE_URL <- "https://parlamento.gub.uy/index.php/documentosyleyes/documentos/diarios-de-sesion"
 
+# User-Agent de navegador real: el sitio del Parlamento (nginx) responde 403 a
+# clientes sin UA de navegador. read_html() no envía UA, por eso la búsqueda
+# hay que hacerla con httr::GET enviando estos headers.
+.UA_NAV <- paste0(
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ",
+  "AppleWebKit/537.36 (KHTML, like Gecko) ",
+  "Chrome/124.0.0.0 Safari/537.36"
+)
+
+#' Descarga una página del buscador como HTML parseado, con headers de navegador.
+#' Devuelve NULL ante error de red o respuesta HTTP con error (incluido 403).
+.leer_html_nav <- function(url) {
+  resp <- tryCatch(
+    httr::GET(
+      url,
+      httr::add_headers(
+        `User-Agent`      = .UA_NAV,
+        `Accept`          = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        `Accept-Language` = "es-UY,es;q=0.9",
+        `Referer`         = BASE_URL
+      ),
+      httr::timeout(40)
+    ),
+    error = function(e) NULL
+  )
+  if (is.null(resp) || httr::http_error(resp)) return(NULL)
+  tryCatch(
+    xml2::read_html(httr::content(resp, as = "text", encoding = "UTF-8")),
+    error = function(e) NULL
+  )
+}
+
 #' Busca sesiones parlamentarias que mencionan un término dado
 #'
 #' @param texto       Término a buscar (ej: "CANNABIS", "VIVIENDA SOCIAL")
@@ -49,7 +81,7 @@ buscar_sesiones <- function(texto,
         page_num
       )
 
-      pagina <- tryCatch(rvest::read_html(url_busqueda), error = function(e) NULL)
+      pagina <- .leer_html_nav(url_busqueda)
       if (is.null(pagina)) { hay_siguiente <- FALSE; break }
 
       links <- pagina %>%
