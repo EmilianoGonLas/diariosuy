@@ -1,0 +1,573 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Diarios del Parlamento · Uruguay — Hoja de estilos principal
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Variables globales ─────────────────────────────────────────── */
+:root {
+  --azul:        #1a4971;
+  --azul-medio:  #1f6098;
+  --azul-claro:  #ddeaf5;
+  --azul-fondo:  #eef4fa;
+  --gris-fondo:  #f4f6f9;
+  --gris-borde:  #dde3ea;
+  --gris-texto:  #64748b;
+  --sombra:      0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+  --sombra-lg:   0 4px 12px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.06);
+  --radio:       10px;
+  --radio-sm:    7px;
+}
+
+/* ── Fondo general ───────────────────────────────────────────── */
+body {
+  background-color: var(--gris-fondo) !important;
+  color: #1e2a35 !important;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────── */
+.navbar {
+  background: var(--azul) !important;
+  border-bottom: 3px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 2px 12px rgba(26,73,113,.30) !important;
+  padding: .55rem 1.2rem !important;
+}
+
+.navbar-brand {
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
+  letter-spacing: -.01em !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+/* Pestañas del navbar */
+.navbar .nav-link {
+  color: rgba(255,255,255,.80) !important;
+  font-size: .9rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  padding: .35rem .8rem !important;
+  transition: background .15s, color .15s !important;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #fff !important;
+  background: rgba(255,255,255,.12) !important;
+}
+.navbar .nav-link.active {
+  color: #fff !important;
+  background: rgba(255,255,255,.18) !important;
+  font-weight: 600 !important;
+}
+.navbar .nav-link.active::after {
+  display: none !important;   /* quita subrayado flatly */
+}
+
+/* Link GitHub en navbar */
+.navbar .nav-item a {
+  color: rgba(255,255,255,.75) !important;
+  font-size: .88rem !important;
+  transition: color .15s !important;
+}
+.navbar .nav-item a:hover {
+  color: #fff !important;
+}
+
+/* ── Cards ──────────────────────────────────────────────────── */
+.card {
+  border: 1px solid var(--gris-borde) !important;
+  border-radius: var(--radio) !important;
+  box-shadow: var(--sombra) !important;
+  background: #fff !important;
+}
+
+.card-header {
+  background: #fff !important;
+  border-bottom: 1px solid var(--gris-borde) !important;
+  border-radius: var(--radio) var(--radio) 0 0 !important;
+  padding: .8rem 1.2rem !important;
+  font-size: .82rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  color: var(--gris-texto) !important;
+}
+
+.card-body {
+  padding: 1.2rem !important;
+}
+
+/* ── Inputs de formulario ───────────────────────────────────────── */
+.form-control,
+.form-select {
+  border-radius: var(--radio-sm) !important;
+  border: 1px solid var(--gris-borde) !important;
+  font-size: .92rem !important;
+  padding: .45rem .75rem !important;
+  transition: border-color .15s, box-shadow .15s !important;
+  background: #fff !important;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--azul-medio) !important;
+  box-shadow: 0 0 0 3px rgba(31,96,152,.14) !important;
+  outline: none !important;
+}
+
+.form-label,
+label.control-label {
+  font-weight: 600 !important;
+  font-size: .85rem !important;
+  color: #374151 !important;
+  margin-bottom: .3rem !important;
+  letter-spacing: .01em !important;
+}
+
+/* ── Selectize (multi-select de legislaturas) ───────────────────── */
+.selectize-input {
+  border-radius: var(--radio-sm) !important;
+  border: 1px solid var(--gris-borde) !important;
+  font-size: .92rem !important;
+  padding: .4rem .7rem !important;
+  box-shadow: none !important;
+  transition: border-color .15s, box-shadow .15s !important;
+  min-height: 38px !important;
+}
+.selectize-input.focus {
+  border-color: var(--azul-medio) !important;
+  box-shadow: 0 0 0 3px rgba(31,96,152,.14) !important;
+}
+.selectize-input .item {
+  background: var(--azul-claro) !important;
+  color: var(--azul) !important;
+  border: 1px solid rgba(26,73,113,.2) !important;
+  border-radius: 4px !important;
+  font-size: .84rem !important;
+  font-weight: 500 !important;
+  padding: 1px 8px !important;
+}
+.selectize-input .item .remove {
+  opacity: 0;
+  transition: opacity .15s ease;
+  margin-left: 5px;
+  color: var(--azul) !important;
+  border-left: 1px solid rgba(26,73,113,.2) !important;
+}
+.selectize-input .item:hover .remove {
+  opacity: 1;
+}
+.selectize-dropdown {
+  border-radius: 0 0 var(--radio-sm) var(--radio-sm) !important;
+  border: 1px solid var(--gris-borde) !important;
+  box-shadow: var(--sombra-lg) !important;
+  font-size: .92rem !important;
+}
+.selectize-dropdown .option.selected,
+.selectize-dropdown .option:hover {
+  background: var(--azul-fondo) !important;
+  color: var(--azul) !important;
+}
+
+/* ── Botones ─────────────────────────────────────────────────────── */
+.btn {
+  border-radius: var(--radio-sm) !important;
+  font-weight: 500 !important;
+  font-size: .9rem !important;
+  transition: all .15s ease !important;
+  letter-spacing: .01em !important;
+}
+
+.btn-primary {
+  background: var(--azul) !important;
+  border-color: var(--azul) !important;
+  box-shadow: 0 1px 4px rgba(26,73,113,.25) !important;
+}
+.btn-primary:hover {
+  background: var(--azul-medio) !important;
+  border-color: var(--azul-medio) !important;
+  box-shadow: 0 4px 10px rgba(26,73,113,.3) !important;
+  transform: translateY(-1px) !important;
+}
+.btn-primary:active {
+  transform: translateY(0) !important;
+}
+
+.btn-success {
+  box-shadow: 0 1px 4px rgba(39,174,96,.2) !important;
+}
+.btn-success:hover {
+  box-shadow: 0 4px 10px rgba(39,174,96,.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn-outline-primary {
+  color: var(--azul) !important;
+  border-color: var(--azul) !important;
+}
+.btn-outline-primary:hover {
+  background: var(--azul) !important;
+  border-color: var(--azul) !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-danger:hover,
+.btn-outline-info:hover {
+  transform: translateY(-1px) !important;
+}
+
+.btn-sm {
+  font-size: .82rem !important;
+  padding: .3rem .65rem !important;
+}
+
+/* ── Badges ──────────────────────────────────────────────────── */
+.badge {
+  font-size: .76rem !important;
+  font-weight: 600 !important;
+  border-radius: 5px !important;
+  letter-spacing: .02em !important;
+}
+.badge.bg-primary {
+  background: var(--azul) !important;
+}
+
+/* ── Tabla del buscador: checkbox ────────────────────────────────── */
+table.dataTable tbody tr td:first-child {
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  color: #c0cad4;
+  font-size: 17px;
+  vertical-align: middle;
+}
+table.dataTable tbody tr td:first-child::before {
+  content: "\2610";
+}
+table.dataTable tbody tr.selected td:first-child {
+  color: var(--azul);
+}
+table.dataTable tbody tr.selected td:first-child::before {
+  content: "\2611";
+}
+table.dataTable tbody tr.selected,
+table.dataTable tbody tr.selected td {
+  background-color: var(--azul-fondo) !important;
+  color: #1a3a52 !important;
+  box-shadow: none !important;
+}
+
+/* ── Tablas: tipografía y hover ──────────────────────────────────── */
+table.dataTable {
+  font-size: .9rem !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+table.dataTable thead th {
+  font-size: .78rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  color: var(--gris-texto) !important;
+  border-bottom: 2px solid var(--gris-borde) !important;
+  padding: .65rem .9rem !important;
+  background: #fafbfc !important;
+  white-space: nowrap !important;
+}
+table.dataTable tbody tr {
+  transition: background .1s ease !important;
+}
+table.dataTable tbody tr:hover td {
+  background-color: #f0f6fc !important;
+}
+table.dataTable tbody td {
+  padding: .6rem .9rem !important;
+  border-bottom: 1px solid #f1f3f5 !important;
+  vertical-align: middle !important;
+}
+
+/* DataTables controles (paginación, buscador) */
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: var(--radio-sm) !important;
+  border: 1px solid var(--gris-borde) !important;
+  font-size: .88rem !important;
+  padding: .3rem .65rem !important;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--azul-medio) !important;
+  box-shadow: 0 0 0 3px rgba(31,96,152,.12) !important;
+  outline: none !important;
+}
+.dataTables_wrapper .dataTables_length select {
+  border-radius: var(--radio-sm) !important;
+  border: 1px solid var(--gris-borde) !important;
+  font-size: .88rem !important;
+  padding: .25rem .5rem !important;
+}
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length label {
+  font-size: .84rem !important;
+  color: var(--gris-texto) !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 5px !important;
+  font-size: .84rem !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: var(--azul) !important;
+  color: #fff !important;
+  border: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: var(--azul-fondo) !important;
+  color: var(--azul) !important;
+  border: 1px solid var(--gris-borde) !important;
+}
+
+/* ── Pestañas internas (navset_card_tab) ─────────────────────────── */
+.nav-tabs {
+  border-bottom: 1px solid var(--gris-borde) !important;
+}
+.nav-tabs .nav-link {
+  color: var(--gris-texto) !important;
+  font-size: .87rem !important;
+  font-weight: 500 !important;
+  border-radius: 7px 7px 0 0 !important;
+  padding: .5rem 1rem !important;
+  border: 1px solid transparent !important;
+  transition: color .15s, background .15s !important;
+}
+.nav-tabs .nav-link:hover {
+  color: var(--azul) !important;
+  background: var(--azul-fondo) !important;
+}
+.nav-tabs .nav-link.active {
+  color: var(--azul) !important;
+  font-weight: 600 !important;
+  background: #fff !important;
+  border-color: var(--gris-borde) var(--gris-borde) #fff !important;
+}
+
+/* ── Alertas y texto de ayuda ────────────────────────────────────── */
+.text-muted {
+  color: var(--gris-texto) !important;
+}
+.small, small {
+  font-size: .83rem !important;
+}
+code {
+  color: var(--azul-medio) !important;
+  background: var(--azul-claro) !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  font-size: .88em !important;
+}
+pre {
+  background: #f8fafc !important;
+  border: 1px solid var(--gris-borde) !important;
+  border-radius: var(--radio-sm) !important;
+  font-size: .88rem !important;
+}
+
+/* ── Notificaciones Shiny ────────────────────────────────────────── */
+.shiny-notification {
+  border-radius: var(--radio) !important;
+  border: none !important;
+  box-shadow: var(--sombra-lg) !important;
+  font-size: .9rem !important;
+  padding: .9rem 1.2rem !important;
+}
+.shiny-notification-message {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border-left: 4px solid #10b981 !important;
+}
+.shiny-notification-warning {
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border-left: 4px solid #f59e0b !important;
+}
+.shiny-notification-error {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  border-left: 4px solid #ef4444 !important;
+}
+.shiny-notification-close {
+  color: inherit !important;
+  opacity: .5 !important;
+}
+
+/* ── Barra de progreso ───────────────────────────────────────────── */
+.shiny-progress .progress {
+  border-radius: 20px !important;
+  height: 5px !important;
+  background: var(--azul-claro) !important;
+}
+.shiny-progress .progress-bar {
+  background: var(--azul) !important;
+  border-radius: 20px !important;
+}
+.shiny-progress-container {
+  border-radius: var(--radio) !important;
+  border: none !important;
+  box-shadow: var(--sombra-lg) !important;
+}
+
+/* ── Modales ─────────────────────────────────────────────────── */
+.modal-content {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18) !important;
+  overflow: hidden !important;
+}
+.modal-header {
+  background: #fafbfc !important;
+  border-bottom: 1px solid var(--gris-borde) !important;
+  padding: 1rem 1.3rem !important;
+}
+.modal-title {
+  font-size: .98rem !important;
+  font-weight: 600 !important;
+  color: var(--azul) !important;
+}
+.modal-body {
+  padding: 1.3rem !important;
+}
+.modal-footer {
+  background: #fafbfc !important;
+  border-top: 1px solid var(--gris-borde) !important;
+  padding: .7rem 1.3rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: .5rem !important;
+}
+
+/* ── Frases de contexto ──────────────────────────────────────────── */
+.frase-card {
+  background: #f8fafd;
+  border-left: 4px solid var(--azul);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  transition: box-shadow .15s;
+}
+.frase-card:hover {
+  box-shadow: 0 2px 8px rgba(26,73,113,.10);
+}
+.frase-card:last-child { margin-bottom: 0; }
+.frase-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.frase-tema {
+  background: var(--azul);
+  color: #fff;
+  font-size: .76rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.frase-pag {
+  color: #94a3b8;
+  font-size: .8rem;
+}
+.frase-cita {
+  font-style: italic;
+  color: #374151;
+  line-height: 1.75;
+  margin: 0;
+  border: none;
+  padding: 0;
+  font-size: .96rem;
+}
+.frase-cita b {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--azul);
+  background: var(--azul-claro);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* ── Legislaturas: pills/toggles ─────────────────────────────────── */
+#sel_legislaturas > label.control-label {
+  display: block;
+  font-weight: 600 !important;
+  font-size: .85rem !important;
+  color: #374151 !important;
+  margin-bottom: .55rem !important;
+  letter-spacing: .01em;
+}
+#sel_legislaturas .shiny-options-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+#sel_legislaturas .checkbox {
+  margin: 0 !important;
+}
+#sel_legislaturas .checkbox label {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--gris-borde);
+  background: #fff;
+  cursor: pointer;
+  font-size: .82rem;
+  font-weight: 500;
+  color: #4a5568;
+  transition: background .12s, border-color .12s, color .12s;
+  user-select: none;
+  white-space: nowrap;
+  margin: 0 !important;
+}
+#sel_legislaturas .checkbox label:hover {
+  border-color: var(--azul-medio);
+  color: var(--azul);
+  background: var(--azul-fondo);
+}
+/* Pill activo: checkbox marcado */
+#sel_legislaturas .checkbox label:has(input[type="checkbox"]:checked) {
+  background: var(--azul);
+  border-color: var(--azul);
+  color: #fff;
+}
+#sel_legislaturas .checkbox input[type="checkbox"] {
+  display: none;
+}
+
+/* ── FileInput (subida de PDFs en web) ───────────────────────────── */
+.shiny-input-container .btn-file {
+  border-radius: var(--radio-sm) 0 0 var(--radio-sm) !important;
+  background: var(--azul-fondo) !important;
+  color: var(--azul) !important;
+  border-color: var(--gris-borde) !important;
+  font-weight: 500 !important;
+  font-size: .88rem !important;
+}
+.shiny-input-container .btn-file:hover {
+  background: var(--azul-claro) !important;
+  border-color: var(--azul-medio) !important;
+}
+#pdf_upload_progress .progress {
+  height: 4px !important;
+  border-radius: 20px !important;
+}
+#pdf_upload_progress .progress-bar {
+  background: var(--azul) !important;
+}
+
+/* ── Placeholder de gráficos vacíos ──────────────────────────────── */
+.placeholder-grafico {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--gris-texto);
+}
+.placeholder-grafico .fa {
+  font-size: 2.8rem;
+  opacity: .15;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,16 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# PDFs de sesiones (se re-descargan con el buscador, no van al repositorio)
+sesiones/
+*.pdf
+
+# Outputs locales
+resultados/
+*.csv
+
+# Archivos temporales de Shiny
+rsconnect/
