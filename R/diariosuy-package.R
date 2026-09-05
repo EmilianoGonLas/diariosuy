@@ -18,7 +18,7 @@ utils::globalVariables(c(
   "etiqueta", "fecha_desde", "fecha_hasta", "archivo", "estado", "texto",
   "termino", "n", "freq", "pagina", "sesion", "valor",
   # Columnas que produce el analizador
-  "paginas", "paginas_con_termino", "fragmentos_texto", "total_cruces",
+  "paginas", "paginas_con_termino", "fragmentos_texto", "total_cruces", "ruta",
   "score_raw", "es_duplicado", "eje",
   # Nombres de columna que ve el usuario en la tabla de resultados
   " ", "Documento", "PDF", "Relevancia", "Ver", "Ver frases",

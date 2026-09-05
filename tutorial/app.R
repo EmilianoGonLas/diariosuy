@@ -144,9 +144,10 @@ ui <- tagList(
           h2(class = "aviso-titulo", "Por qué esto se instala y no es una web"),
           p("El sitio del Parlamento ",
             tags$strong("rechaza las conexiones desde fuera de Uruguay"),
-            ": responde ", tags$code("HTTP 403"), " a las IP extranjeras. Todos los ",
-            "servicios de hosting gratuito están en el exterior, así que una app ",
-            "publicada en la web no puede consultar la fuente oficial."),
+            ": responde ", tags$code("HTTP 403"), " a las IP extranjeras. Una app ",
+            "publicada en la web consultar\u00eda el sitio desde el servidor donde ",
+            "est\u00e1 alojada, no desde tu conexi\u00f3n, y por eso no obtiene ",
+            "resultados."),
           p("Corriendo el paquete en tu propia máquina, la consulta sale desde tu ",
             "conexión y funciona. Por eso ",
             tags$strong("necesitás estar conectado desde Uruguay"),
@@ -208,10 +209,11 @@ ui <- tagList(
       div(
         class = "uso",
         h3("Analizador"),
-        p("Apuntás a la carpeta con los PDFs descargados y elegís el tema. ",
-          "Te devuelve las sesiones ordenadas por relevancia, los fragmentos ",
-          "donde aparece el término, un gráfico de evolución en el tiempo y ",
-          "otro de co-ocurrencia con otros temas que agregues."),
+        p("Elegís el ZIP que te dio el Buscador —tal cual, sin descomprimir— o ",
+          "una carpeta con PDFs, y escribís el tema. Te devuelve las sesiones ",
+          "ordenadas por relevancia, los fragmentos donde aparece el término, ",
+          "un gráfico de evolución en el tiempo y otro de co-ocurrencia con ",
+          "otros temas que agregues."),
         captura("04-analisis.png",
                 "Análisis de seis diarios de sesión para el término “aborto”.")
       ),
@@ -225,7 +227,7 @@ ui <- tagList(
         "",
         'sesiones <- buscar_sesiones("aborto", camara = "All", lgl_ids = c(49, 50))',
         'descargar_sesiones(sesiones[1:5, ], "pdfs/")',
-        'analizar_pdfs("pdfs/", "aborto")'
+        'analizar_pdfs("pdfs/", "aborto")  # también acepta un .zip'
       ),
 
       # ── Advertencias ────────────────────────────────────────────────────────

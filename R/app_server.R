@@ -15,7 +15,8 @@ app_server <- function(input, output, session) {
     contador         = 0,     # contador para generar IDs únicos
     ultimo_dl        = NULL,  # estadísticas del último ZIP descargado
     dir_pdfs         = NULL,  # directorio de PDFs subidos (solo en versión web)
-    errores_busqueda = NULL   # motivos de fallo de la última búsqueda (red/HTTP)
+    errores_busqueda = NULL,  # motivos de fallo de la última búsqueda (red/HTTP)
+    origen_pdfs      = NULL   # carpeta o .zip elegido para analizar (modo local)
   )
 
   # ── Búsqueda ────────────────────────────────────────────────────────────────
@@ -300,6 +301,21 @@ app_server <- function(input, output, session) {
     roots_locales  <- stats::setNames(normalizePath(candidatas), names(candidatas))
     shinyFiles::shinyDirChoose(input, "btn_carpeta", roots = roots_locales,
                                 allowDirCreate = FALSE)
+    shinyFiles::shinyFileChoose(input, "btn_zip", roots = roots_locales,
+                                 filetypes = c("zip"))
+
+    # Las dos formas de elegir origen escriben en el mismo lugar, y gana la
+    # última que se haya usado.
+    observeEvent(input$btn_carpeta, {
+      p <- shinyFiles::parseDirPath(roots_locales, input$btn_carpeta)
+      if (length(p) == 1 && nzchar(p)) rv$origen_pdfs <- as.character(p)
+    })
+
+    observeEvent(input$btn_zip, {
+      sel <- shinyFiles::parseFilePaths(roots_locales, input$btn_zip)
+      if (nrow(sel) == 0) return()
+      rv$origen_pdfs <- as.character(sel$datapath[1])
+    })
   }
 
   # En web: manejar subida de archivos → copiar a carpeta temporal
@@ -353,22 +369,16 @@ app_server <- function(input, output, session) {
     })
   }
 
-  # Reactivo unificado: devuelve la carpeta de PDFs sin importar el entorno
+  # Reactivo unificado: devuelve el origen de los PDFs sin importar el entorno.
+  # En local puede ser una carpeta o un .zip; analizar_pdfs() acepta las dos.
   carpeta_pdfs <- reactive({
-    if (ES_LOCAL) {
-      req(input$btn_carpeta)
-      p <- shinyFiles::parseDirPath(roots_locales, input$btn_carpeta)
-      if (length(p) == 0 || !nzchar(p)) return(NULL)
-      p
-    } else {
-      rv$dir_pdfs
-    }
+    if (ES_LOCAL) rv$origen_pdfs else rv$dir_pdfs
   })
 
   output$lbl_carpeta <- renderText({
     if (!ES_LOCAL) return("")
     p <- carpeta_pdfs()
-    if (is.null(p)) "Ninguna carpeta seleccionada" else p
+    if (is.null(p)) "Nada seleccionado todav\u00eda" else p
   })
 
   # Función auxiliar: leer todos los términos de comparación activos.
@@ -593,7 +603,7 @@ app_server <- function(input, output, session) {
                    data-path="%s" title="Abrir este PDF">
              <i class="fa fa-file-pdf"></i> Abrir
            </button>',
-          file.path(rv$carpeta_analisis, archivo)
+          ruta
         ),
 
         # Botón ver frases (solo si hay fragmentos)

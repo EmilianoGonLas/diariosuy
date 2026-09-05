@@ -18,6 +18,7 @@
 #' @param progreso_fn     Función opcional: function(valor, mensaje) para reportar progreso
 #'
 #' @return tibble con columnas: archivo, estado (resultado por cada PDF)
+#' @export
 descargar_sesiones <- function(sesiones, directorio, progreso_fn = NULL) {
   fs::dir_create(directorio)
 
@@ -108,6 +109,7 @@ descargar_sesiones <- function(sesiones, directorio, progreso_fn = NULL) {
 #' @param directorio Carpeta con los PDFs a empaquetar
 #' @param destino    Ruta del archivo ZIP de salida
 #' @return TRUE si el ZIP se creó correctamente, FALSE si no había PDFs
+#' @export
 crear_zip <- function(directorio, destino) {
   archivos_rel <- list.files(directorio, pattern = "\\.pdf$", full.names = FALSE)
   if (length(archivos_rel) == 0) return(FALSE)

@@ -81,6 +81,7 @@ BASE_URL <- "https://parlamento.gub.uy/index.php/documentosyleyes/documentos/dia
 #'   url_intermedia. Lleva siempre el atributo "errores": vector de mensajes con
 #'   los fallos de red/HTTP que hubo. Un tibble vacío CON errores significa
 #'   "no se pudo consultar el sitio"; vacío SIN errores, "el sitio no devolvió nada".
+#' @export
 buscar_sesiones <- function(texto,
                              camara      = "All",
                              lgl_ids     = c(49, 50),
@@ -193,6 +194,7 @@ buscar_sesiones <- function(texto,
 #'
 #' @param url_intermedia URL del visor de documentos del parlamento
 #' @return URL del PDF como string, o NA si no se encuentra
+#' @export
 obtener_url_pdf <- function(url_intermedia) {
   ua <- paste0(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ",

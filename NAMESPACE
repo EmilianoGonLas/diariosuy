@@ -2,6 +2,13 @@
 
 export(LEGISLATURAS)
 export(abrir_app)
+export(analizar_pdfs)
+export(buscar_sesiones)
+export(crear_zip)
+export(descargar_sesiones)
+export(grafico_coocurrencias)
+export(grafico_timeline)
+export(obtener_url_pdf)
 import(dplyr)
 import(ggplot2)
 import(shiny)

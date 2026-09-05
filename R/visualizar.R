@@ -6,6 +6,7 @@
 #' @param datos  tibble resultado de analizar_pdfs()
 #' @param titulo Título del gráfico
 #' @return objeto plotly
+#' @export
 grafico_timeline <- function(datos, titulo = "Menciones del término en el tiempo") {
 
   datos_ok <- datos %>%
@@ -74,6 +75,7 @@ grafico_timeline <- function(datos, titulo = "Menciones del término en el tiemp
 #' @param datos          tibble resultado de analizar_pdfs()
 #' @param terminos_cruce lista nombrada usada en el análisis
 #' @return objeto plotly o NULL si no hay términos de cruce
+#' @export
 grafico_coocurrencias <- function(datos, terminos_cruce) {
   if (length(terminos_cruce) == 0) return(NULL)
 

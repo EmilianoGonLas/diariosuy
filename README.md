@@ -12,10 +12,10 @@ La app corre en tu computadora y se abre en tu navegador.
 ## Por qué se instala en vez de usarse en una web
 
 `parlamento.gub.uy` **rechaza las conexiones desde fuera de Uruguay**: responde
-HTTP 403 a las IP extranjeras. Cualquier servidor de hosting gratuito está en el
-exterior, así que una versión publicada en la web no puede consultar el sitio
-oficial. Corriendo el paquete en tu propia máquina, la consulta sale desde tu
-conexión y funciona.
+HTTP 403 a las IP extranjeras. Una versión publicada en la web consultaría el
+sitio desde el servidor donde está alojada, no desde tu conexión, y por eso no
+obtiene resultados. Corriendo el paquete en tu propia máquina, la consulta sale
+desde tu conexión y funciona.
 
 O sea: **necesitás estar conectado desde Uruguay** para que el buscador traiga
 resultados. Si lo corrés desde afuera, la app te lo dice explícitamente en vez de
@@ -56,10 +56,10 @@ interesan y las descargás en un ZIP.
 
 ### Analizador
 
-Apuntás a la carpeta con los PDFs descargados y elegís el tema a analizar. Te
-devuelve una tabla con las sesiones ordenadas por relevancia, los fragmentos
-donde aparece el término, un gráfico de evolución en el tiempo y otro de
-co-ocurrencia con otros temas que agregues.
+Elegís el ZIP que te dio el Buscador —tal cual, sin descomprimir— o una carpeta
+con PDFs, y escribís el tema a analizar. Te devuelve una tabla con las sesiones
+ordenadas por relevancia, los fragmentos donde aparece el término, un gráfico de
+evolución en el tiempo y otro de co-ocurrencia con otros temas que agregues.
 
 ## Advertencias sobre la fuente
 
@@ -80,6 +80,9 @@ library(diariosuy)
 sesiones <- buscar_sesiones("aborto", camara = "All", lgl_ids = c(49, 50))
 descargar_sesiones(sesiones[1:5, ], "pdfs/")
 analizar_pdfs("pdfs/", "aborto")
+
+# analizar_pdfs() también acepta un ZIP directamente
+analizar_pdfs("sesiones.zip", "aborto")
 ```
 
 ## Qué hay en este repositorio

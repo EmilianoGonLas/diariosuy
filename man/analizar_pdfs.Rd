@@ -12,7 +12,11 @@ analizar_pdfs(
 )
 }
 \arguments{
-\item{directorio}{Carpeta con los PDFs a analizar}
+\item{directorio}{Carpeta con los PDFs a analizar. También acepta la
+ruta de un archivo \code{.zip}: en ese caso se extrae a una carpeta temporal y
+se analiza su contenido, así el ZIP que arma el Buscador se puede usar tal
+cual. La búsqueda de PDFs es recursiva, de modo que no importa si quedaron
+dentro de subcarpetas.}
 
 \item{termino_principal}{Expresión regular del término principal}
 
@@ -21,7 +25,7 @@ analizar_pdfs(
 \item{progreso_fn}{function(valor, mensaje) para reportar progreso}
 }
 \value{
-tibble con columnas: archivo, legislatura, fecha, id_doc,
+tibble con columnas: archivo, ruta, legislatura, fecha, id_doc,
 paginas_con_termino, \code{cruce_[nombre]}, total_cruces, puntuacion,
 fragmentos_texto, estado
 }

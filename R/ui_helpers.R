@@ -18,21 +18,32 @@ ui_analizador <- function() {
           # ── Fuente de PDFs: carpeta (local) o subida (web) ──────────────
           if (ES_LOCAL) {
             tagList(
-              tags$label(class = "form-label", "Carpeta con los PDFs descargados"),
-              div(class = "d-flex gap-2 align-items-center mb-1",
+              tags$label(class = "form-label", "PDFs a analizar"),
+              div(class = "d-flex gap-2 align-items-center mb-1 flex-wrap",
+                  shinyFiles::shinyFilesButton(
+                    "btn_zip",
+                    label     = "Elegir ZIP\u2026",
+                    title     = "Seleccion\u00e1 el ZIP que descargaste del Buscador",
+                    multiple  = FALSE,
+                    class     = "btn btn-outline-primary btn-sm",
+                    icon      = icon("file-zipper")
+                  ),
                   shinyFiles::shinyDirButton(
                     "btn_carpeta",
                     label = "Elegir carpeta\u2026",
                     title = "Seleccion\u00e1 la carpeta donde guardaste los PDFs",
                     class = "btn btn-outline-secondary btn-sm",
                     icon  = icon("folder-open")
-                  ),
-                  tags$code(class = "text-muted small flex-grow-1 text-truncate",
+                  )
+              ),
+              div(class = "mb-1",
+                  tags$code(class = "text-muted small d-block text-truncate",
                              textOutput("lbl_carpeta", inline = TRUE))
               ),
               tags$small(class = "text-muted d-block mb-3",
-                          "Los PDFs que descargaste desde el Buscador llegan como ZIP.",
-                          " Descomprimilo y seleccion\u00e1 esa carpeta.")
+                          "El Buscador te entrega un ZIP: pod\u00e9s elegirlo tal cual,",
+                          " sin descomprimir. Si ya lo descomprimiste, us\u00e1",
+                          " \u201cElegir carpeta\u201d.")
             )
           } else {
             tagList(

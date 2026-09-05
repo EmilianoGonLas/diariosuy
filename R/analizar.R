@@ -135,22 +135,63 @@
   list(ws = ws, we = we, text = stringr::str_sub(texto, ws, we))
 }
 
+#' Extrae un ZIP a una carpeta temporal y devuelve su ruta
+#'
+#' Se usa para poder analizar directamente el ZIP que arma el Buscador, sin
+#' pedirle a quien lo usa que lo descomprima antes.
+#'
+#' @param ruta_zip Ruta al archivo .zip
+#' @return Ruta de la carpeta temporal donde quedó el contenido.
+#' @keywords internal
+.extraer_zip <- function(ruta_zip) {
+  destino <- file.path(
+    tempdir(),
+    paste0("zip_", tools::file_path_sans_ext(basename(ruta_zip)), "_",
+           as.integer(Sys.time()))
+  )
+  fs::dir_create(destino)
+  zip::unzip(ruta_zip, exdir = destino)
+  destino
+}
+
 #' Analiza PDFs buscando un término principal y co-ocurrencias opcionales
 #'
-#' @param directorio        Carpeta con los PDFs a analizar
+#' @param directorio        Carpeta con los PDFs a analizar. También acepta la
+#'   ruta de un archivo `.zip`: en ese caso se extrae a una carpeta temporal y
+#'   se analiza su contenido, así el ZIP que arma el Buscador se puede usar tal
+#'   cual. La búsqueda de PDFs es recursiva, de modo que no importa si quedaron
+#'   dentro de subcarpetas.
 #' @param termino_principal Expresión regular del término principal
 #' @param terminos_cruce    Lista nombrada: list(turismo = "turist|extranjer")
 #' @param progreso_fn       function(valor, mensaje) para reportar progreso
 #'
-#' @return tibble con columnas: archivo, legislatura, fecha, id_doc,
+#' @return tibble con columnas: archivo, ruta, legislatura, fecha, id_doc,
 #'   paginas_con_termino, `cruce_[nombre]`, total_cruces, puntuacion,
 #'   fragmentos_texto, estado
+#' @export
 analizar_pdfs <- function(directorio,
                            termino_principal,
                            terminos_cruce = list(),
                            progreso_fn    = NULL) {
 
-  archivos <- fs::dir_ls(directorio, glob = "*.pdf")
+  # Un ZIP se extrae y se analiza la carpeta resultante.
+  if (length(directorio) == 1 &&
+      !dir.exists(directorio) &&
+      grepl("\\.zip$", directorio, ignore.case = TRUE)) {
+    if (!file.exists(directorio)) {
+      message("No existe el archivo: ", directorio)
+      return(tibble::tibble())
+    }
+    directorio <- tryCatch(.extraer_zip(directorio), error = function(e) {
+      message("No se pudo abrir el ZIP: ", conditionMessage(e))
+      NULL
+    })
+    if (is.null(directorio)) return(tibble::tibble())
+  }
+
+  # recurse = TRUE porque al descomprimir los PDFs suelen quedar dentro de una
+  # subcarpeta con el nombre del ZIP.
+  archivos <- fs::dir_ls(directorio, glob = "*.pdf", recurse = TRUE)
 
   if (length(archivos) == 0) {
     message("No se encontraron PDFs en: ", directorio)
@@ -228,6 +269,7 @@ analizar_pdfs <- function(directorio,
 
       fila <- tibble::tibble(
         archivo             = nombre,
+        ruta                = as.character(ruta),
         legislatura         = legislatura_val,
         fecha               = fecha_val,
         id_doc              = id_doc_val,
@@ -332,6 +374,7 @@ analizar_pdfs <- function(directorio,
     }, error = function(e) {
       tibble::tibble(
         archivo             = basename(ruta),
+        ruta                = as.character(ruta),
         legislatura         = NA_character_,
         fecha               = as.Date(NA),
         id_doc              = NA_character_,
