@@ -14,11 +14,23 @@ library(bslib)
 # .noWS = "inside" es imprescindible: htmltools indenta el HTML que genera, y
 # dentro de un <pre> esos espacios se muestran tal cual, corriendo el código
 # hacia la derecha.
+#
+# El <pre> va envuelto para poder posicionar el botón de copiar arriba a la
+# derecha sin que quede dentro del texto que se copia.
 bloque_codigo <- function(...) {
-  tags$pre(
-    class = "bloque-codigo",
-    .noWS = "inside",
-    tags$code(.noWS = "inside", paste(c(...), collapse = "\n"))
+  div(
+    class = "codigo-caja",
+    tags$button(
+      class        = "btn-copiar",
+      type         = "button",
+      `aria-label` = "Copiar el código al portapapeles",
+      "Copiar"
+    ),
+    tags$pre(
+      class = "bloque-codigo",
+      .noWS = "inside",
+      tags$code(.noWS = "inside", paste(c(...), collapse = "\n"))
+    )
   )
 }
 
@@ -44,13 +56,54 @@ captura <- function(archivo, epigrafe) {
 
 REPO <- "https://github.com/EmilianoGonLas/diariosuy"
 
+# Copiado al portapapeles. La API moderna (navigator.clipboard) sólo existe en
+# contextos seguros —https o localhost—; el fallback con execCommand cubre el
+# resto y los navegadores viejos.
+JS_COPIAR <- '
+document.addEventListener("click", function (ev) {
+  var boton = ev.target.closest(".btn-copiar");
+  if (!boton) return;
+
+  var codigo = boton.parentElement.querySelector("code");
+  if (!codigo) return;
+  var texto = codigo.innerText;
+
+  function avisar(ok) {
+    boton.textContent = ok ? "\u00a1Copiado!" : "No se pudo copiar";
+    boton.classList.toggle("copiado", ok);
+    setTimeout(function () {
+      boton.textContent = "Copiar";
+      boton.classList.remove("copiado");
+    }, 1800);
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(texto).then(function () { avisar(true); },
+                                              function () { avisar(false); });
+  } else {
+    var area = document.createElement("textarea");
+    area.value = texto;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(area);
+    avisar(ok);
+  }
+});
+'
+
+
 # ── UI ────────────────────────────────────────────────────────────────────────
 
 ui <- tagList(
   tags$head(
     tags$link(rel = "stylesheet", href = "tutorial.css"),
     tags$meta(name = "viewport", content = "width=device-width, initial-scale=1"),
-    tags$title("Diarios del Parlamento · Uruguay")
+    tags$title("Diarios del Parlamento · Uruguay"),
+    tags$script(HTML(JS_COPIAR))
   ),
 
   bslib::page_fluid(

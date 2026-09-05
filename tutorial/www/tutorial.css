@@ -103,6 +103,45 @@ h2.seccion {
 .nota { color: var(--tenue); font-size: .89rem !important; }
 
 /* ── Bloques de código ────────────────────────────────────────────────────── */
+.codigo-caja {
+  position: relative;
+}
+
+.btn-copiar {
+  position: absolute;
+  top: 1.05rem;
+  right: .6rem;
+  z-index: 2;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.08);
+  color: #cfdae6;
+  font-size: .76rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: .32rem .6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.btn-copiar:hover {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+}
+.btn-copiar:focus-visible {
+  outline: 2px solid #7fb2d9;
+  outline-offset: 2px;
+}
+.btn-copiar.copiado {
+  background: var(--verde);
+  border-color: var(--verde);
+  color: #fff;
+}
+
+/* Espacio a la derecha para que el código largo no pase por debajo del botón */
+.codigo-caja .bloque-codigo {
+  padding-right: 5.5rem;
+}
+
 .bloque-codigo {
   background: var(--fondo-codigo);
   color: #e8eef4;

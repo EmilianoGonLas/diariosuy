@@ -7,6 +7,8 @@ junto a qué otros temas.
 
 La app corre en tu computadora y se abre en tu navegador.
 
+**Guía de instalación con capturas:** https://emilianogonzalez.shinyapps.io/diariosuy/
+
 ## Por qué se instala en vez de usarse en una web
 
 `parlamento.gub.uy` **rechaza las conexiones desde fuera de Uruguay**: responde
@@ -79,6 +81,18 @@ sesiones <- buscar_sesiones("aborto", camara = "All", lgl_ids = c(49, 50))
 descargar_sesiones(sesiones[1:5, ], "pdfs/")
 analizar_pdfs("pdfs/", "aborto")
 ```
+
+## Qué hay en este repositorio
+
+| Carpeta | Qué es |
+|---|---|
+| `R/` | El paquete: scraper, descargador, analizador, gráficos y la app. |
+| `inst/www/` | Hoja de estilos de la app. |
+| `tutorial/` | La página de instalación que se publica en shinyapps.io. Es una app Shiny estática, con su propio `www/` y las capturas. Se despliega con `Rscript deploy.R`. |
+| `man/` | Documentación generada por roxygen2. |
+
+La página del tutorial se publica aparte a propósito: no puede ser el paquete
+mismo porque tiene que estar accesible para alguien que todavía no instaló nada.
 
 ## Licencia
 
