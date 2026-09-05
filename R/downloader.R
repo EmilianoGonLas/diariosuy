@@ -10,7 +10,7 @@
 
 #' Descarga PDFs de sesiones seleccionadas a un directorio local
 #'
-#' Cada PDF se nombra con el patrón: Lgl_[LEGISLATURA]_[FECHA]_ID_[ID].pdf
+#' Cada PDF se nombra con el patrón: `Lgl_[LEGISLATURA]_[FECHA]_ID_[ID].pdf`
 #' Si el archivo ya existe, lo omite sin re-descargarlo.
 #'
 #' @param sesiones        tibble con columnas: legislatura, fecha, id_doc, url_intermedia

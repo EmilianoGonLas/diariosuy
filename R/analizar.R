@@ -143,7 +143,7 @@
 #' @param progreso_fn       function(valor, mensaje) para reportar progreso
 #'
 #' @return tibble con columnas: archivo, legislatura, fecha, id_doc,
-#'   paginas_con_termino, cruce_[nombre], total_cruces, puntuacion,
+#'   paginas_con_termino, `cruce_[nombre]`, total_cruces, puntuacion,
 #'   fragmentos_texto, estado
 analizar_pdfs <- function(directorio,
                            termino_principal,

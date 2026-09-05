@@ -15,7 +15,19 @@ BASE_URL <- "https://parlamento.gub.uy/index.php/documentosyleyes/documentos/dia
 )
 
 #' Descarga una página del buscador como HTML parseado, con headers de navegador.
-#' Devuelve NULL ante error de red o respuesta HTTP con error (incluido 403).
+#'
+#' Devuelve siempre una lista list(html = , error = ):
+#'   - éxito  -> html con el documento parseado, error NULL
+#'   - fallo  -> html NULL, error con el motivo legible (código HTTP o error de red)
+#'
+#' Es importante que el motivo viaje hacia arriba: el sitio del Parlamento
+#' bloquea las IP de fuera de Uruguay (responde 403 o directamente no contesta),
+#' y sin este dato la app mostraba "no se encontraron sesiones" —indistinguible
+#' de una búsqueda legítimamente vacía— en vez de explicar el bloqueo.
+#'
+#' @param url URL de la página del buscador a descargar.
+#' @return Una lista con los elementos `html` y `error`.
+#' @keywords internal
 .leer_html_nav <- function(url) {
   resp <- tryCatch(
     httr::GET(
@@ -28,13 +40,34 @@ BASE_URL <- "https://parlamento.gub.uy/index.php/documentosyleyes/documentos/dia
       ),
       httr::timeout(40)
     ),
-    error = function(e) NULL
+    error = function(e) e
   )
-  if (is.null(resp) || httr::http_error(resp)) return(NULL)
-  tryCatch(
+
+  if (inherits(resp, "condition")) {
+    return(list(
+      html  = NULL,
+      error = paste0("No se pudo conectar con parlamento.gub.uy (",
+                     conditionMessage(resp), ")")
+    ))
+  }
+
+  estado <- httr::status_code(resp)
+  if (estado >= 400) {
+    return(list(
+      html  = NULL,
+      error = sprintf("parlamento.gub.uy respondi\u00f3 HTTP %d", estado)
+    ))
+  }
+
+  pagina <- tryCatch(
     xml2::read_html(httr::content(resp, as = "text", encoding = "UTF-8")),
     error = function(e) NULL
   )
+  if (is.null(pagina)) {
+    return(list(html = NULL, error = "La respuesta del sitio no se pudo interpretar como HTML"))
+  }
+
+  list(html = pagina, error = NULL)
 }
 
 #' Busca sesiones parlamentarias que mencionan un término dado
@@ -44,16 +77,20 @@ BASE_URL <- "https://parlamento.gub.uy/index.php/documentosyleyes/documentos/dia
 #' @param lgl_ids     Vector de IDs de legislatura a buscar (ver LEGISLATURAS en global.R)
 #' @param progreso_fn Función opcional para reportar progreso: function(valor, mensaje)
 #'
-#' @return tibble con columnas: legislatura, lgl_id, fecha, id_doc, url_intermedia
+#' @return tibble con columnas: legislatura, lgl_id, cuerpo, fecha, id_doc,
+#'   url_intermedia. Lleva siempre el atributo "errores": vector de mensajes con
+#'   los fallos de red/HTTP que hubo. Un tibble vacío CON errores significa
+#'   "no se pudo consultar el sitio"; vacío SIN errores, "el sitio no devolvió nada".
 buscar_sesiones <- function(texto,
                              camara      = "All",
                              lgl_ids     = c(49, 50),
                              progreso_fn = NULL) {
 
   lgls <- LEGISLATURAS %>% filter(lgl_id %in% lgl_ids)
-  if (nrow(lgls) == 0) return(tibble::tibble())
+  if (nrow(lgls) == 0) return(structure(tibble::tibble(), errores = character(0)))
 
   resultados <- list()
+  errores    <- character(0)
 
   for (i in seq_len(nrow(lgls))) {
     lgl <- lgls[i, ]
@@ -81,8 +118,13 @@ buscar_sesiones <- function(texto,
         page_num
       )
 
-      pagina <- .leer_html_nav(url_busqueda)
-      if (is.null(pagina)) { hay_siguiente <- FALSE; break }
+      respuesta <- .leer_html_nav(url_busqueda)
+      if (is.null(respuesta$html)) {
+        errores <- c(errores, sprintf("%s: %s", lgl$etiqueta, respuesta$error))
+        hay_siguiente <- FALSE
+        break
+      }
+      pagina <- respuesta$html
 
       links <- pagina %>%
         rvest::html_nodes("td.views-field-DS-File-IMG a") %>%
@@ -97,8 +139,13 @@ buscar_sesiones <- function(texto,
       for (j in seq_along(links)) {
         link <- links[j]
         if (!grepl("^http", link)) link <- paste0("https://parlamento.gub.uy", link)
+        link <- sub("^http://", "https://", link)
 
-        id_doc    <- str_extract(link, "\\d+$")
+        # El link es .../diarios-de-sesion/7017/IMG : el ID es el último grupo
+        # de dígitos del path, no necesariamente el final de la cadena.
+        id_doc    <- str_extract(link, "(?<=diarios-de-sesion/)\\d+")
+        if (is.na(id_doc)) id_doc <- str_extract(link, "\\d+(?=/[A-Za-z]+/?$)")
+        if (is.na(id_doc)) id_doc <- str_extract(link, "\\d+$")
         raw_fecha <- trimws(fechas[j])
         parsed_d <- tryCatch(
           as.Date(raw_fecha, tryFormats = c("%d-%m-%Y", "%d/%m/%Y", "%Y-%m-%d")),
@@ -131,8 +178,11 @@ buscar_sesiones <- function(texto,
     }
   }
 
-  if (length(resultados) == 0) return(tibble::tibble())
-  bind_rows(resultados) %>% arrange(desc(fecha))
+  if (length(resultados) == 0) return(structure(tibble::tibble(), errores = errores))
+  structure(
+    bind_rows(resultados) %>% arrange(desc(fecha)),
+    errores = errores
+  )
 }
 
 #' Obtiene la URL directa del PDF desde la página intermedia del parlamento

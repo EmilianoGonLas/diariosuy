@@ -1,0 +1,39 @@
+Package: diariosuy
+Title: Buscador y Analizador de Diarios de Sesión del Parlamento Uruguayo
+Version: 0.1.0
+Authors@R: 
+    person("Emiliano", "González", email = "emiliano.gonzalez.lasa@fing.edu.uy",
+           role = c("aut", "cre"))
+Description: Busca sesiones parlamentarias por palabra clave en el sitio del
+    Parlamento del Uruguay, descarga los diarios de sesión en PDF y analiza sus
+    textos: frecuencia de términos, evolución en el tiempo y co-ocurrencias.
+    La app se ejecuta en la máquina del usuario, condición necesaria para
+    consultar el sitio oficial, que rechaza las conexiones desde fuera de
+    Uruguay.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1)
+Imports:
+    bslib,
+    dplyr,
+    DT,
+    fs,
+    ggplot2,
+    httr,
+    pdftools,
+    plotly,
+    purrr,
+    rlang,
+    rvest,
+    shiny,
+    shinyFiles,
+    stringr,
+    tibble,
+    tidyr,
+    xml2,
+    zip
+URL: https://github.com/EmilianoGonLas/diariosuy
+BugReports: https://github.com/EmilianoGonLas/diariosuy/issues

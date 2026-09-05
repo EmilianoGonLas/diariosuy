@@ -12,5 +12,9 @@ sesiones/
 resultados/
 *.csv
 
+# Artefactos de construcción del paquete
+*.tar.gz
+*.Rcheck/
+
 # Archivos temporales de Shiny
 rsconnect/

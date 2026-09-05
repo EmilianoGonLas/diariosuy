@@ -1,0 +1,169 @@
+/* tutorial.css — estilos de la página de instrucciones */
+
+:root {
+  --azul:        #1a4971;
+  --azul-oscuro: #12334f;
+  --verde:       #18a999;
+  --texto:       #2c3e50;
+  --tenue:       #6b7c8c;
+  --borde:       #e3e8ed;
+  --fondo-codigo:#1e2a35;
+}
+
+body {
+  color: var(--texto);
+  background: #f7f9fb;
+}
+
+/* ── Encabezado ───────────────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%);
+  color: #fff;
+  padding: 3.4rem 1rem 3rem;
+  text-align: center;
+}
+.hero-inner  { max-width: 720px; margin: 0 auto; }
+.hero-icono  { font-size: 3rem; line-height: 1; margin-bottom: .6rem; }
+.hero-titulo {
+  font-weight: 700;
+  letter-spacing: -.02em;
+  font-size: clamp(1.9rem, 5vw, 2.7rem);
+  margin-bottom: .8rem;
+}
+.hero-bajada {
+  font-size: 1.12rem;
+  color: rgba(255,255,255,.9);
+  margin-bottom: .7rem;
+}
+.hero-nota {
+  font-size: .96rem;
+  color: rgba(255,255,255,.62);
+  margin-bottom: 1.6rem;
+}
+.hero-acciones .btn { font-weight: 600; }
+
+/* ── Contenido ────────────────────────────────────────────────────────────── */
+.contenido {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2.6rem 1.1rem 3rem;
+}
+
+h2.seccion {
+  font-size: 1.42rem;
+  font-weight: 700;
+  color: var(--azul);
+  margin: 2.8rem 0 1.2rem;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid var(--borde);
+}
+
+/* ── Aviso del geobloqueo ─────────────────────────────────────────────────── */
+.aviso {
+  display: flex;
+  gap: 1rem;
+  background: #fff8e6;
+  border: 1px solid #f0d9a0;
+  border-left: 4px solid #e6a817;
+  border-radius: 9px;
+  padding: 1.3rem 1.4rem;
+  margin-bottom: 1rem;
+}
+.aviso-icono  { font-size: 1.7rem; line-height: 1.2; }
+.aviso-titulo { font-size: 1.13rem; font-weight: 700; margin-bottom: .55rem; }
+.aviso p      { margin-bottom: .6rem; font-size: .97rem; }
+.aviso p:last-child { margin-bottom: 0; }
+
+/* ── Pasos ────────────────────────────────────────────────────────────────── */
+.paso {
+  display: flex;
+  gap: 1.1rem;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1.3rem 1.4rem;
+  margin-bottom: 1rem;
+}
+.paso-num {
+  flex: 0 0 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.paso-cuerpo  { flex: 1 1 auto; min-width: 0; }
+.paso-titulo  { font-size: 1.08rem; font-weight: 700; margin-bottom: .5rem; }
+.paso p       { font-size: .97rem; margin-bottom: .6rem; }
+.paso p:last-child { margin-bottom: 0; }
+
+.nota { color: var(--tenue); font-size: .89rem !important; }
+
+/* ── Bloques de código ────────────────────────────────────────────────────── */
+.bloque-codigo {
+  background: var(--fondo-codigo);
+  color: #e8eef4;
+  border-radius: 7px;
+  padding: .85rem 1rem;
+  margin: .7rem 0;
+  overflow-x: auto;
+  font-size: .89rem;
+  line-height: 1.6;
+}
+.bloque-codigo code { color: inherit; background: none; padding: 0; }
+
+code {
+  background: #eef2f6;
+  color: #12334f;
+  padding: .1rem .35rem;
+  border-radius: 4px;
+  font-size: .88em;
+}
+
+/* ── Capturas ─────────────────────────────────────────────────────────────── */
+.uso {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+.uso h3 { font-size: 1.13rem; font-weight: 700; color: var(--azul); margin-bottom: .6rem; }
+.uso p  { font-size: .97rem; }
+
+.captura { margin: 1.1rem 0 0; }
+.captura img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  box-shadow: 0 2px 10px rgba(20,40,60,.08);
+}
+.captura figcaption {
+  font-size: .86rem;
+  color: var(--tenue);
+  text-align: center;
+  margin-top: .55rem;
+}
+
+/* ── Advertencias y pie ───────────────────────────────────────────────────── */
+.advertencias { font-size: .97rem; padding-left: 1.2rem; }
+.advertencias li { margin-bottom: .7rem; }
+
+.pie {
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--borde);
+  text-align: center;
+  font-size: .92rem;
+  color: var(--tenue);
+}
+.pie a { color: var(--azul); }
+
+@media (max-width: 576px) {
+  .paso  { flex-direction: column; gap: .7rem; }
+  .aviso { flex-direction: column; gap: .5rem; }
+}

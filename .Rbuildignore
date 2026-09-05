@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^deploy\.R$
+^rsconnect$
+^tutorial$
+^LICENSE\.md$
