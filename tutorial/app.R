@@ -176,14 +176,21 @@ ui <- tagList(
       ),
 
       paso(
-        "3", "Instalá el paquete",
+        "3", "Instal\u00e1 el paquete",
         p("Desde la consola de R:"),
         bloque_codigo(
-          'install.packages("remotes")',
-          'remotes::install_github("EmilianoGonLas/diariosuy")'
+          'install.packages("diariosuy", repos = c(',
+          '  "https://emilianogonlas.r-universe.dev",',
+          '  "https://cloud.r-project.org"',
+          '))'
         ),
         p(class = "nota",
-          "La primera vez puede tardar unos minutos: instala las dependencias.")
+          "Se instala desde ",
+          tags$a("r-universe", href = "https://emilianogonlas.r-universe.dev",
+                 target = "_blank"),
+          ", que publica versiones ya compiladas para Windows y macOS. ",
+          "La primera vez puede tardar unos minutos porque instala las ",
+          "dependencias.")
       ),
 
       paso(
@@ -250,7 +257,9 @@ ui <- tagList(
       # ── Pie ─────────────────────────────────────────────────────────────────
       div(
         class = "pie",
-        p(tags$a(href = REPO, target = "_blank", "Código y reporte de errores"),
+        p(tags$a(href = "https://emilianogonlas.r-universe.dev", target = "_blank",
+                 "Paquete en r-universe"), " \u00b7 ",
+          tags$a(href = REPO, target = "_blank", "C\u00f3digo y reporte de errores"),
           " · Datos: ",
           tags$a(href = "https://parlamento.gub.uy/documentosyleyes/documentos/diarios-de-sesion",
                  target = "_blank", "Parlamento del Uruguay")),

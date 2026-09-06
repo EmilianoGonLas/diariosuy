@@ -26,6 +26,19 @@ mostrar una búsqueda vacía.
 Requiere R 4.1 o superior.
 
 ```r
+install.packages("diariosuy", repos = c(
+  "https://emilianogonlas.r-universe.dev",
+  "https://cloud.r-project.org"
+))
+```
+
+Se instala desde [r-universe](https://emilianogonlas.r-universe.dev), que
+publica binarios para Windows y macOS: no hace falta compilar nada. El segundo
+repositorio es CRAN, de donde salen las dependencias.
+
+Para instalar la versión de desarrollo directamente del repositorio:
+
+```r
 install.packages("remotes")
 remotes::install_github("EmilianoGonLas/diariosuy")
 ```
