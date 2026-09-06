@@ -360,6 +360,64 @@ analizar_pdfs <- function(directorio,
         }
       }
 
+      # ── Sin cruces: mostrar igual frases del término principal ─────────────
+      # Sirve para hacerse una idea del documento sin abrir el PDF: distinguir
+      # de un vistazo una mención de trámite —el tema listado en el orden del
+      # día— de una discusión real.
+      if (length(fragmentos_lista) == 0) {
+        pags_principal <- which(tiene_principal)
+
+        # Los ejemplos se reparten a lo largo del documento en vez de tomar las
+        # primeras páginas: con cinco frases conviene que cubran la sesión
+        # entera, porque el tema puede aparecer al principio como trámite y
+        # discutirse mucho después.
+        idx <- if (length(pags_principal) <= MAX_FRAGS) {
+          seq_along(pags_principal)
+        } else {
+          unique(round(seq(1, length(pags_principal), length.out = MAX_FRAGS)))
+        }
+
+        for (pg in pags_principal[idx]) {
+          txt        <- paginas[pg]
+          match_info <- stringr::str_locate(txt, termino_principal)
+          if (is.na(match_info[1L, "start"])) next
+
+          s    <- match_info[1L, "start"]
+          e    <- match_info[1L, "end"]
+          frag <- .extraer_fragmento(txt, s, e)
+
+          pos_s <- max(1L, s - frag$ws + 1L)
+          pos_e <- max(pos_s, min(e - frag$ws + 1L, nchar(frag$text)))
+
+          snip_html <- paste0(
+            stringr::str_sub(frag$text, 1L,        pos_s - 1L),
+            "<b>",
+            stringr::str_sub(frag$text, pos_s,      pos_e),
+            "</b>",
+            stringr::str_sub(frag$text, pos_e + 1L, nchar(frag$text))
+          )
+
+          # La etiqueta es la palabra que efectivamente coincidió: buscando
+          # "cannabis, marihuana" dice cuál de las dos apareció en esa frase.
+          coincidencia <- stringr::str_sub(txt, s, e)
+
+          fragmentos_lista <- c(
+            fragmentos_lista,
+            paste0(
+              '<div class="frase-card">',
+                '<div class="frase-meta">',
+                  '<span class="frase-tema">', coincidencia, '</span>',
+                  '<span class="frase-pag">p\u00e1g.\u00a0', pg, '</span>',
+                '</div>',
+                '<blockquote class="frase-cita">\u201c',
+                  trimws(snip_html),
+                '\u201d</blockquote>',
+              '</div>'
+            )
+          )
+        }
+      }
+
       fila[["total_cruces"]]     <- total_cruces
       fila[["fragmentos_texto"]] <- if (length(fragmentos_lista) > 0)
         paste(fragmentos_lista, collapse = "") else ""

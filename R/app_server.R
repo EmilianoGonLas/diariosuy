@@ -637,17 +637,19 @@ app_server <- function(input, output, session) {
           ruta
         ),
 
-        # Botón ver frases (solo si hay fragmentos)
+        # Botón ver frases. Hay fragmentos siempre que el término aparezca:
+        # con temas de comparación muestran los cruces, y sin ellos, ejemplos
+        # del término principal repartidos por el documento.
         `Ver frases` = ifelse(
           !is.na(fragmentos_texto) & nzchar(fragmentos_texto),
           sprintf(
             '<button class="btn btn-sm btn-outline-info ver-frases"
-                     data-id="%s" title="Ver frases donde aparecen juntos los temas">
+                     data-id="%s" title="Ver las frases donde aparece el t\u00e9rmino">
                <i class="fa fa-quote-left"></i> Ver frases
              </button>',
             archivo
           ),
-          '<span class="text-muted small">sin cruce</span>'
+          '<span class="text-muted small">sin menciones</span>'
         )
       ) %>%
       rename(all_of(nombres_cruce)) %>%
@@ -717,9 +719,19 @@ app_server <- function(input, output, session) {
       tags$div(
         tags$p(
           class = "text-muted small mb-3",
-          "Los t\u00e9rminos del tema de comparaci\u00f3n aparecen en ",
-          tags$strong("negrita"), ". Cada fragmento es el contexto cercano",
-          " en la p\u00e1gina donde tambi\u00e9n se mencion\u00f3 el tema principal."
+          if (fila$total_cruces > 0) {
+            tagList(
+              "Los t\u00e9rminos del tema de comparaci\u00f3n aparecen en ",
+              tags$strong("negrita"), ". Cada fragmento es el contexto cercano",
+              " en la p\u00e1gina donde tambi\u00e9n se mencion\u00f3 el tema principal."
+            )
+          } else {
+            tagList(
+              "El t\u00e9rmino buscado aparece en ", tags$strong("negrita"),
+              ". Son hasta cinco ejemplos repartidos a lo largo de la sesi\u00f3n,",
+              " para ver de qu\u00e9 se habl\u00f3 sin abrir el PDF."
+            )
+          }
         ),
         HTML(fila$fragmentos_texto)
       ),
