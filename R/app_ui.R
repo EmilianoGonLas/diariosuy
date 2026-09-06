@@ -10,7 +10,17 @@ app_ui <- function() {
   tagList(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "diariosuy/styles.css"),
-      tags$meta(name = "viewport", content = "width=device-width, initial-scale=1")
+      tags$meta(name = "viewport", content = "width=device-width, initial-scale=1"),
+      # Marca un campo como inválido con el estilo de Bootstrap (borde rojo).
+      # Va como handler propio para no sumar una dependencia sólo por esto.
+      tags$script(HTML(
+        "Shiny.addCustomMessageHandler('marcarCampo', function(m) {",
+        "  var el = document.getElementById(m.id);",
+        "  if (!el) return;",
+        "  el.classList.toggle('is-invalid', m.invalido);",
+        "  if (m.invalido) { el.focus(); }",
+        "});"
+      ))
     ),
     bslib::page_navbar(
     title = tagList(

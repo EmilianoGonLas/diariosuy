@@ -369,6 +369,17 @@ app_server <- function(input, output, session) {
     })
   }
 
+  # Apenas escribe algo, se saca la marca roja: dejarla puesta mientras corrige
+  # el campo se lee como si el error siguiera vigente.
+  observeEvent(input$txt_termino_analisis, {
+    if (nzchar(trimws(input$txt_termino_analisis %||% ""))) {
+      session$sendCustomMessage(
+        "marcarCampo",
+        list(id = "txt_termino_analisis", invalido = FALSE)
+      )
+    }
+  }, ignoreInit = TRUE)
+
   # Reactivo unificado: devuelve el origen de los PDFs sin importar el entorno.
   # En local puede ser una carpeta o un .zip; analizar_pdfs() acepta las dos.
   carpeta_pdfs <- reactive({
@@ -435,7 +446,27 @@ app_server <- function(input, output, session) {
   })
 
   observeEvent(input$btn_analizar, {
-    req(input$txt_termino_analisis)
+    # Sin término no hay nada que analizar. Antes esto era un req(), que corta
+    # en silencio: al usuario le parecía que el botón no hacía nada.
+    termino_ingresado <- trimws(input$txt_termino_analisis %||% "")
+    if (!nzchar(termino_ingresado)) {
+      session$sendCustomMessage(
+        "marcarCampo",
+        list(id = "txt_termino_analisis", invalido = TRUE)
+      )
+      showNotification(
+        ui       = tagList(icon("triangle-exclamation", class = "me-1"),
+                           "Escrib\u00ed la palabra o tema que quer\u00e9s analizar."),
+        type     = "warning",
+        duration = 5
+      )
+      return()
+    }
+    session$sendCustomMessage(
+      "marcarCampo",
+      list(id = "txt_termino_analisis", invalido = FALSE)
+    )
+
     ruta <- carpeta_pdfs()
 
     if (is.null(ruta)) {

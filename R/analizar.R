@@ -174,6 +174,19 @@ analizar_pdfs <- function(directorio,
                            terminos_cruce = list(),
                            progreso_fn    = NULL) {
 
+  # El texto de las páginas se pasa a minúsculas antes de buscar, así que el
+  # patrón tiene que ignorar mayúsculas o no encuentra nada: escribir "Cannabis"
+  # daba cero menciones en documentos que sí hablaban del tema.
+  #
+  # Se marca el patrón como insensible a mayúsculas en vez de convertirlo con
+  # str_to_lower(): el término es una expresión regular, y bajarlo de caso
+  # cambiaría el significado de las clases escritas en mayúscula (\\S deja de ser
+  # "no espacio" y pasa a ser "espacio").
+  termino_principal <- stringr::regex(termino_principal, ignore_case = TRUE)
+  if (length(terminos_cruce) > 0) {
+    terminos_cruce <- lapply(terminos_cruce, stringr::regex, ignore_case = TRUE)
+  }
+
   # Un ZIP se extrae y se analiza la carpeta resultante.
   if (length(directorio) == 1 &&
       !dir.exists(directorio) &&
