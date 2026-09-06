@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1039 1200" width="1039" height="1200">
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#1a4971"/>
+      <stop offset="100%" stop-color="#0e2942"/>
+    </linearGradient>
+    <clipPath id="hex">
+      <polygon points="519.5,0 1039,300 1039,900 519.5,1200 0,900 0,300"/>
+    </clipPath>
+  </defs>
+
+  <polygon points="519.5,0 1039,300 1039,900 519.5,1200 0,900 0,300" fill="url(#fondo)"/>
+
+  <g clip-path="url(#hex)">
+    <polygon points="519.5,0 1039,300 1039,900 519.5,1200 0,900 0,300"
+             fill="none" stroke="#18a999" stroke-width="34"/>
+  </g>
+
+  <!-- Palacio Legislativo -->
+  <g fill="#e8eef4">
+    <polygon points="268,392 519.5,266 771,392"/>
+    <rect x="278" y="392" width="483" height="30"/>
+    <rect x="316" y="436" width="46" height="162" rx="5"/>
+    <rect x="400" y="436" width="46" height="162" rx="5"/>
+    <rect x="496" y="436" width="46" height="162" rx="5"/>
+    <rect x="592" y="436" width="46" height="162" rx="5"/>
+    <rect x="676" y="436" width="46" height="162" rx="5"/>
+    <rect x="292" y="610" width="455" height="24" rx="5"/>
+    <rect x="262" y="644" width="515" height="26" rx="5"/>
+  </g>
+
+  <!-- Renglones de texto: el resaltado es el término encontrado -->
+  <g>
+    <rect x="300" y="724" width="164" height="22" rx="11" fill="#ffffff" opacity="0.26"/>
+    <rect x="480" y="724" width="140" height="22" rx="11" fill="#18a999"/>
+    <rect x="636" y="724" width="104" height="22" rx="11" fill="#ffffff" opacity="0.26"/>
+    <rect x="336" y="768" width="120" height="22" rx="11" fill="#ffffff" opacity="0.26"/>
+    <rect x="472" y="768" width="232" height="22" rx="11" fill="#ffffff" opacity="0.26"/>
+  </g>
+
+  <text x="519.5" y="928" text-anchor="middle"
+        font-family="DejaVu Sans" font-weight="bold" font-size="112"
+        fill="#ffffff" letter-spacing="-1">diariosuy</text>
+
+  <text x="519.5" y="1000" text-anchor="middle"
+        font-family="DejaVu Sans" font-size="42"
+        fill="#8fb3cc" letter-spacing="7">PARLAMENTO · UY</text>
+</svg>

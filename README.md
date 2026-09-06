@@ -1,4 +1,4 @@
-# diariosuy
+# diariosuy <img src="man/figures/logo.png" align="right" height="132" alt="Logo de diariosuy" />
 
 Buscador y analizador de los **diarios de sesión del Parlamento uruguayo**, como
 paquete de R. Busca sesiones por palabra clave en el sitio oficial, descarga los
